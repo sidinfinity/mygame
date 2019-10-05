@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# This is my first pygame
+# Made by myself
+
 import pygame
 import os
 import random
@@ -11,7 +15,7 @@ WIDTH = 1204      # width for gaming screen
 LENGTH = 806      # length for gaming screen
 BALL_MOVE = 6
 LINE_MOVE = 5
-ASSET_FOLDER     = "assets/Pong_graphics"
+ASSET_FOLDER = "assets/Pong_graphics"
 
 # set up assets folder
 
