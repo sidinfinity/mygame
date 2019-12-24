@@ -7,8 +7,6 @@ from settings import *
 from smash import *
 vec = pg.math.Vector2
 
-
-
 class Platform(pg.sprite.Sprite):
     def __init__(self, width, length, x, y):
         super(Platform, self).__init__()
@@ -76,5 +74,4 @@ class Player(pg.sprite.Sprite):
         # deducting lives
         if self.fell:
             self.lives -= 1
-            print(self.lives)
             self.fell = False

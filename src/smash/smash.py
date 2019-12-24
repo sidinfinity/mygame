@@ -22,8 +22,11 @@ class Game:
     def new(self):
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
-        self.player = Player(self)
-        self.all_sprites.add(self.player)
+        self.players = pg.sprite.Group()
+        self.player1 = Player(self)
+        self.player2 = Player(self)
+        self.all_sprites.add(self.player1, self.player2)
+        self.players.add(self.player1, self.player2)
         for plat in PLATFORM_LIST:
             self.all_sprites.add(Platform(*plat))
             self.platforms.add(Platform(*plat))
@@ -41,8 +44,8 @@ class Game:
     def draw_shield_bar(self, surf, x, y, percent):
         if percent < 0:
             percent = 0
-        BAR_LENGTH = 400
-        BAR_HEIGHT = 50
+        BAR_LENGTH = 300
+        BAR_HEIGHT = 28
         fill = (percent / 100) * BAR_LENGTH
         outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
         fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
@@ -64,26 +67,36 @@ class Game:
                     self.playing = False
                 self.running = False
 
-            self.player.process_event(event)
+            self.player1.process_event(event)
+            self.player2.process_event(event)
 
     def update(self):
         self.all_sprites.update()
         # check for player-platform collision
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+        hits = pg.sprite.spritecollide(self.player1, self.platforms, False)
         if hits:
-            if self.player.vel.y > 0:
-                self.player.pos.y = hits[0].rect.top
-                self.player.vel.y = 0
+            if self.player1.vel.y > 0:
+                self.player1.pos.y = hits[0].rect.top
+                self.player1.vel.y = 0
+
+        hits = pg.sprite.spritecollide(self.player2, self.platforms, False)
+        if hits:
+            if self.player2.vel.y > 0:
+                self.player2.pos.y = hits[0].rect.top
+                self.player2.vel.y = 0
 
         # if player dies 3 times, game over
-        if self.player.lives == 0:
-            self.playing = False
+        if self.player1.lives == 0:
+            show_go_screen()
+
+        if self.player2.lives == 0:
+            self.player2.kill()
 
     def draw(self):
         self.screen.fill(LIGHTBLUE)
         self.all_sprites.draw(self.screen)
-        self.draw_shield_bar(self.screen, 10, 50, self.player.shield)
-        self.draw_text(str(self.player.shield), 18, WHITE, 30, 10)
+        self.draw_shield_bar(self.screen, 10, 30, self.player1.shield)
+        self.draw_text(str(f"HEALTH: {self.player1.shield}"), 18, WHITE, 50, 10)
         # *after* drawing everything, flip the display
         pg.display.flip()
 
