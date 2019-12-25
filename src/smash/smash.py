@@ -90,10 +90,12 @@ class Game:
 
         # if player dies 3 times, game over
         if self.player1.lives == 0:
-            show_go_screen()
+            self.player1.kill()
+            self.playing = False
 
         if self.player2.lives == 0:
             self.player2.kill()
+            self.playing = False
 
     def draw(self):
         self.screen.fill(LIGHTBLUE)
@@ -112,6 +114,8 @@ def start_game():
         g = Game()
         g.show_start_screen()
         g.new_game()
+        pg.quit()
+        return
 
 if __name__ == '__main__':
     start_game()

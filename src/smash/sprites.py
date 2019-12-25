@@ -19,10 +19,10 @@ class Platform(pg.sprite.Sprite):
         pass
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, game, play_num):
+    def __init__(self, game, controls):
         super(Player, self).__init__()
         self.game = game
-        self.play_num = play_num
+        self.controls = controls
         self.image = pg.Surface((30, 30))
         self.image.fill(BLUE)
         self.rect = self.image.get_rect()
@@ -41,17 +41,17 @@ class Player(pg.sprite.Sprite):
 
     def process_event(self, event):
         if event.type == pg.KEYDOWN:
-            if event.key == pg.K_w:
+            if event.key == self.controls['jump']:
                 self.jump()
 
     def update(self):
         self.acc = vec(0, GRAVITY)
         keys = pg.key.get_pressed()
 
-        if keys[pg.K_a]:
+        if keys[self.controls['left']]:
             self.acc.x = -PLAYER_ACC
 
-        if keys[pg.K_d]:
+        if keys[self.controls['right']]:
             self.acc.x = PLAYER_ACC
 
         # applies friction
