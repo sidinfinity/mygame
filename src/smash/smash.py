@@ -3,30 +3,35 @@ import pygame as pg
 import os
 import random
 from settings import *
-from sprites import *
+from sprites import Platform, Player
 from os import path
-
-
 
 
 class Game:
     def __init__(self):
+        # pygame
         pg.init()
         pg.mixer.init() # sounds
-        self.screen = pg.display.set_mode((WIDTH, LENGTH))
         pg.display.set_caption("PVP FIGHTING GAME")
+
+        self.screen = pg.display.set_mode((WIDTH, LENGTH))
         self.clock = pg.time.Clock()
         self.running = True
         self.font_name = pg.font.match_font(FONT_NAME)
 
     def new(self):
+        # sprite groups
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
         self.players = pg.sprite.Group()
+
+        # players
         self.player1 = Player(self)
         self.player2 = Player(self)
+
         self.all_sprites.add(self.player1, self.player2)
         self.players.add(self.player1, self.player2)
+
         for plat in PLATFORM_LIST:
             self.all_sprites.add(Platform(*plat))
             self.platforms.add(Platform(*plat))

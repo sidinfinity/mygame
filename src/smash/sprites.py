@@ -4,7 +4,6 @@ import random
 import os
 import pygame as pg
 from settings import *
-from smash import *
 vec = pg.math.Vector2
 
 class Platform(pg.sprite.Sprite):
