@@ -21,7 +21,7 @@ LIGHTBLUE = (0, 155, 155)
 PLATFORM_LIST = [(WIDTH-200, 30, 100, LENGTH - 150),
                  (250, 25, 200, LENGTH-310),
                  (250, 25, WIDTH-450, LENGTH-310),
-                  (125, 20, (WIDTH/2)-62.5, LENGTH-450)]
+                 (125, 20, (WIDTH/2)-62.5, LENGTH-450)]
 
 # for player movement
 PLAYER_ACC = 1.0

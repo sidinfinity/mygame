@@ -11,7 +11,7 @@ class Game:
     def __init__(self):
         # pygame
         pg.init()
-        pg.mixer.init() # sounds
+        pg.mixer.init()  # sounds
         pg.display.set_caption("PVP FIGHTING GAME")
 
         self.screen = pg.display.set_mode((WIDTH, LENGTH))
@@ -101,7 +101,9 @@ class Game:
         self.screen.fill(LIGHTBLUE)
         self.all_sprites.draw(self.screen)
         self.draw_shield_bar(self.screen, 10, 30, self.player1.shield)
-        self.draw_text(str(f"HEALTH: {self.player1.shield}"), 18, WHITE, 50, 10)
+        self.draw_text(
+            str(f"HEALTH: {self.player1.shield}"), 18, WHITE, 50, 10
+        )
         # *after* drawing everything, flip the display
         pg.display.flip()
 
@@ -116,6 +118,7 @@ def start_game():
         g.new_game()
         pg.quit()
         return
+
 
 if __name__ == '__main__':
     start_game()
