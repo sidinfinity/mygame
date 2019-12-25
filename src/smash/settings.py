@@ -1,4 +1,5 @@
 # settings for my game (smash.py)
+import pygame as pg
 
 # dimension of the game window
 WIDTH = 1240
@@ -29,3 +30,16 @@ GRAVITY = 0.8
 PLAYER_JUMP = 20
 
 FONT_NAME = 'arial'
+
+# players controls
+CONTROLS_1 = {'left': pg.K_a,
+              'right': pg.K_d,
+              'shield': pg.K_c,
+              'interact': pg.K_e,
+              'shoot': pg.K_q}
+
+CONTROLS_2 = {'left': pg.K_j,
+              'right': pg.K_l,
+              'shield': pg.K_n,
+              'interact': pg.K_u,
+              'shoot': pg.K_o}

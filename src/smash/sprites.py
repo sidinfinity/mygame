@@ -20,9 +20,10 @@ class Platform(pg.sprite.Sprite):
         pass
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, game):
+    def __init__(self, game, play_num):
         super(Player, self).__init__()
         self.game = game
+        self.play_num = play_num
         self.image = pg.Surface((30, 30))
         self.image.fill(BLUE)
         self.rect = self.image.get_rect()
@@ -47,6 +48,7 @@ class Player(pg.sprite.Sprite):
     def update(self):
         self.acc = vec(0, GRAVITY)
         keys = pg.key.get_pressed()
+
         if keys[pg.K_a]:
             self.acc.x = -PLAYER_ACC
 
