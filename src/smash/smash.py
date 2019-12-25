@@ -3,30 +3,34 @@ import pygame as pg
 import os
 import random
 from settings import *
-from sprites import *
+from sprites import Platform, Player
 from os import path
-
-
 
 
 class Game:
     def __init__(self):
+        # pygame
         pg.init()
         pg.mixer.init() # sounds
-        self.screen = pg.display.set_mode((WIDTH, LENGTH))
         pg.display.set_caption("PVP FIGHTING GAME")
+
+        self.screen = pg.display.set_mode((WIDTH, LENGTH))
         self.clock = pg.time.Clock()
-        self.running = True
         self.font_name = pg.font.match_font(FONT_NAME)
 
-    def new(self):
+    def new_game(self):
+        # sprite groups
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
         self.players = pg.sprite.Group()
+
+        # players
         self.player1 = Player(self, CONTROLS_1)
         self.player2 = Player(self, CONTROLS_2)
+
         self.all_sprites.add(self.player1, self.player2)
         self.players.add(self.player1, self.player2)
+
         for plat in PLATFORM_LIST:
             self.all_sprites.add(Platform(*plat))
             self.platforms.add(Platform(*plat))
@@ -65,7 +69,6 @@ class Game:
             if event.type == pg.QUIT:
                 if self.playing:
                     self.playing = False
-                self.running = False
 
             self.player1.process_event(event)
             self.player2.process_event(event)
@@ -103,20 +106,12 @@ class Game:
     def show_start_screen(self):
         pass
 
-    def show_go_screen(self):
-        self.running = False
-
-
 
 def start_game():
-    g = Game()
-    g.show_start_screen()
-
-    while g.running:
-        g.new()
-        g.show_go_screen()
-
-    pg.quit()
+    while True:
+        g = Game()
+        g.show_start_screen()
+        g.new_game()
 
 if __name__ == '__main__':
     start_game()
