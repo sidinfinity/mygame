@@ -16,10 +16,9 @@ class Game:
 
         self.screen = pg.display.set_mode((WIDTH, LENGTH))
         self.clock = pg.time.Clock()
-        self.running = True
         self.font_name = pg.font.match_font(FONT_NAME)
 
-    def new(self):
+    def new_game(self):
         # sprite groups
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
@@ -70,7 +69,6 @@ class Game:
             if event.type == pg.QUIT:
                 if self.playing:
                     self.playing = False
-                self.running = False
 
             self.player1.process_event(event)
             self.player2.process_event(event)
@@ -108,20 +106,12 @@ class Game:
     def show_start_screen(self):
         pass
 
-    def show_go_screen(self):
-        self.running = False
-
-
 
 def start_game():
-    g = Game()
-    g.show_start_screen()
-
-    while g.running:
-        g.new()
-        g.show_go_screen()
-
-    pg.quit()
+    while True:
+        g = Game()
+        g.show_start_screen()
+        g.new_game()
 
 if __name__ == '__main__':
     start_game()
