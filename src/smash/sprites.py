@@ -6,6 +6,7 @@ import pygame as pg
 from settings import *
 vec = pg.math.Vector2
 
+
 class Platform(pg.sprite.Sprite):
     def __init__(self, width, length, x, y):
         super(Platform, self).__init__()
@@ -17,6 +18,7 @@ class Platform(pg.sprite.Sprite):
 
     def update(self):
         pass
+
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game):
