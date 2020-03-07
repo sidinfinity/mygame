@@ -11,7 +11,6 @@ class Bullet(pg.sprite.Sprite):
 
     def update(self):
         self.rect.x+=5
-        print("firing bullet")
         if pg.time.get_ticks() - self.spawn_time >= 3000:
             self.kill()
 
@@ -58,7 +57,6 @@ class Pistol(Weapon):
 
 
     def draw(self):
-        print("pistol draw")
 
         self.all_sprites.draw(self.screen)
         # call draw() method for all sprite objects

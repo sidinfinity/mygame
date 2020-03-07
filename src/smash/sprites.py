@@ -116,7 +116,6 @@ class Player(pg.sprite.Sprite):
 
     def draw(self):
         # draws sprites contained in players
-        print("draw player sprites")
 
         self.all_sprites.draw(self.screen)
         # call draw() method for all sprite objects
