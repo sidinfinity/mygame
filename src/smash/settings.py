@@ -15,6 +15,7 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 PURPLE = (255, 0, 255)
 WHITE = (255, 255, 255)
+YELLOW = (225, 225, 0)
 LIGHTBLUE = (0, 155, 155)
 
 # platform LENGTH
