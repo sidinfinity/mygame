@@ -4,7 +4,6 @@ import random
 import os
 import pygame as pg
 from settings import *
-vec = pg.math.Vector2
 
 
 class Platform(pg.sprite.Sprite):
@@ -21,37 +20,50 @@ class Platform(pg.sprite.Sprite):
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, game):
+    def __init__(self, controls, name):
         super(Player, self).__init__()
-        self.game = game
+        self.vec = pg.math.Vector2
+        self.controls = controls
         self.image = pg.Surface((30, 30))
         self.image.fill(BLUE)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH/2, LENGTH/2)
-        self.pos = vec(WIDTH/2, LENGTH/2)
-        self.vel = vec(0, 0)
-        self.acc = vec(0, 0)
+        self.pos = self.vec(WIDTH/2, LENGTH/2)
+        self.vel = self.vec(0, 0)
+        self.acc = self.vec(0, 0)
         self.lives = 3
         self.fell = False
         self.shield = 100
+        self.name = name
+
+        self._platform_group = None
+
+    @property
+    def platform_group(self):
+        return self._platform_group
+
+    @platform_group.setter
+    def platform_group(self, platforms):
+        self._platform_group = platforms
 
     def jump(self):
-        hits = pg.sprite.spritecollide(self, self.game.platforms, False)
+        hits = pg.sprite.spritecollide(self, self._platform_group, False)
         if hits:
             self.vel.y = -20
 
     def process_event(self, event):
         if event.type == pg.KEYDOWN:
-            if event.key == pg.K_w:
+            if event.key == self.controls['jump']:
                 self.jump()
 
     def update(self):
-        self.acc = vec(0, GRAVITY)
+        self.acc = self.vec(0, GRAVITY)
         keys = pg.key.get_pressed()
-        if keys[pg.K_a]:
+
+        if keys[self.controls['left']]:
             self.acc.x = -PLAYER_ACC
 
-        if keys[pg.K_d]:
+        if keys[self.controls['right']]:
             self.acc.x = PLAYER_ACC
 
         # applies friction

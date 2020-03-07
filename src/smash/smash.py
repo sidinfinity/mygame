@@ -8,11 +8,14 @@ from os import path
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, player1, player2):
         # pygame
         pg.init()
         pg.mixer.init()  # sounds
         pg.display.set_caption("PVP FIGHTING GAME")
+
+        self.player1 = player1
+        self.player2 = player2
 
         self.screen = pg.display.set_mode((WIDTH, LENGTH))
         self.clock = pg.time.Clock()
@@ -24,16 +27,16 @@ class Game:
         self.platforms = pg.sprite.Group()
         self.players = pg.sprite.Group()
 
-        # players
-        self.player1 = Player(self)
-        self.player2 = Player(self)
-
         self.all_sprites.add(self.player1, self.player2)
         self.players.add(self.player1, self.player2)
 
         for plat in PLATFORM_LIST:
             self.all_sprites.add(Platform(*plat))
             self.platforms.add(Platform(*plat))
+
+        # set platform group in player instance
+        self.player1.platform_group = self.platforms
+        self.player2.platform_group = self.platforms
 
         self.run()
 
@@ -90,10 +93,12 @@ class Game:
 
         # if player dies 3 times, game over
         if self.player1.lives == 0:
-            show_go_screen()
+            self.player1.kill()
+            self.playing = False
 
         if self.player2.lives == 0:
             self.player2.kill()
+            self.playing = False
 
     def draw(self):
         self.screen.fill(LIGHTBLUE)
@@ -110,10 +115,16 @@ class Game:
 
 
 def start_game():
+        # players
+    player1 = Player(CONTROLS_1, "Laurel")
+    player2 = Player(CONTROLS_2, "Hardy")
+
     while True:
-        g = Game()
+        g = Game(player1, player2)
         g.show_start_screen()
         g.new_game()
+        pg.quit()
+        return
 
 
 if __name__ == '__main__':
