@@ -27,7 +27,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
 
-            self.all_sprites.add(self.player1, self.player2)
+        self.all_sprites.add(self.player1, self.player2)
 
         for plat in PLATFORM_LIST:
             self.all_sprites.add(Platform(self.screen, *plat))
