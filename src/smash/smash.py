@@ -8,31 +8,30 @@ from os import path
 
 
 class Game:
-    def __init__(self, player1, player2):
+    def __init__(self, player1, player2, color1=BLUE, color2=RED):
         # pygame
         pg.init()
         pg.mixer.init()  # sounds
         pg.display.set_caption("PVP FIGHTING GAME")
 
-        self.player1 = player1
-        self.player2 = player2
-
         self.screen = pg.display.set_mode((WIDTH, LENGTH))
         self.clock = pg.time.Clock()
         self.font_name = pg.font.match_font(FONT_NAME)
+
+        self.player1 = Player(CONTROLS_1, self.screen, player1, color1)
+        self.player2 = Player(CONTROLS_2, self.screen, player1, color2)
+
 
     def new_game(self):
         # sprite groups
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
-        self.players = pg.sprite.Group()
 
         self.all_sprites.add(self.player1, self.player2)
-        self.players.add(self.player1, self.player2)
 
         for plat in PLATFORM_LIST:
-            self.all_sprites.add(Platform(*plat))
-            self.platforms.add(Platform(*plat))
+            self.all_sprites.add(Platform(self.screen, *plat))
+            self.platforms.add(Platform(self.screen, *plat))
 
         # set platform group in player instance
         self.player1.platform_group = self.platforms
@@ -66,6 +65,8 @@ class Game:
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
 
+
+
     def events(self):
         for event in pg.event.get():
             # check for closing window
@@ -91,6 +92,14 @@ class Game:
                 self.player2.pos.y = hits[0].rect.top
                 self.player2.vel.y = 0
 
+        # checking if player dies
+        if self.player1.shield == 0:
+            self.player1.lives -= 1
+
+        if self.player2.shield == 0:
+            self.player2.lives -= 1
+
+
         # if player dies 3 times, game over
         if self.player1.lives == 0:
             self.player1.kill()
@@ -102,11 +111,20 @@ class Game:
 
     def draw(self):
         self.screen.fill(LIGHTBLUE)
-        self.all_sprites.draw(self.screen)
         self.draw_shield_bar(self.screen, 10, 30, self.player1.shield)
+        self.draw_shield_bar(self.screen, WIDTH-310, 30, self.player1.shield)
         self.draw_text(
             str(f"HEALTH: {self.player1.shield}"), 18, WHITE, 50, 10
         )
+        self.draw_text(
+            str(f"HEALTH: {self.player2.shield}"), 18, WHITE, WIDTH-50, 10
+        )
+        self.all_sprites.draw(self.screen)
+
+        # call draw() method for all sprite objects
+        for sprite in self.all_sprites:
+            sprite.draw()
+
         # *after* drawing everything, flip the display
         pg.display.flip()
 
@@ -116,15 +134,11 @@ class Game:
 
 def start_game():
         # players
-    player1 = Player(CONTROLS_1, "Laurel")
-    player2 = Player(CONTROLS_2, "Hardy")
-
-    while True:
-        g = Game(player1, player2)
-        g.show_start_screen()
-        g.new_game()
-        pg.quit()
-        return
+    g = Game("Laurel", "Hardy")
+    g.show_start_screen()
+    g.new_game()
+    pg.quit()
+    return
 
 
 if __name__ == '__main__':
