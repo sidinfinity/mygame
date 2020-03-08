@@ -44,6 +44,7 @@ class Player(pg.sprite.Sprite):
         self.direction = None
         self._platform_group = None
         self.weapon = Pistol(self.controls, self.screen)
+        self.weapon.direction = self.direction
         self.all_sprites = pg.sprite.Group()
         self.all_sprites.add(self.weapon)
 
@@ -67,7 +68,7 @@ class Player(pg.sprite.Sprite):
                 self.jump()
 
     def gun_update(self):
-        self.weapon.shoot()
+        self.weapon.update()
         if self.direction == 'left':
             self.weapon.rect.right = self.rect.centerx
 
@@ -75,6 +76,7 @@ class Player(pg.sprite.Sprite):
             self.weapon.rect.left = self.rect.centerx
 
         self.weapon.rect.centery = self.rect.centery
+        self.weapon.direction = self.direction
 
     def update(self):
         # gun update
