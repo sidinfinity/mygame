@@ -56,7 +56,6 @@ class Player(pg.sprite.Sprite):
     def platform_group(self, platforms):
         self._platform_group = platforms
 
-
     def jump(self):
         hits = pg.sprite.spritecollide(self, self._platform_group, False)
         if hits:
@@ -123,3 +122,6 @@ class Player(pg.sprite.Sprite):
         # call draw() method for all sprite objects
         for sprite in self.all_sprites:
             sprite.draw()
+
+    def get_ammunition_sprite_group(self):
+        return self.weapon.get_ammunition_sprite_group()

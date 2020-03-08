@@ -19,13 +19,13 @@ class Game:
         self.font_name = pg.font.match_font(FONT_NAME)
 
         self.player1 = Player(CONTROLS_1, self.screen, player1, color1)
-        self.player2 = Player(CONTROLS_2, self.screen, player1, color2)
-
+        self.player2 = Player(CONTROLS_2, self.screen, player2, color2)
 
     def new_game(self):
         # sprite groups
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
+        self.players_sprite = pg.sprite.Group()
 
         self.all_sprites.add(self.player1, self.player2)
 
@@ -37,6 +37,9 @@ class Game:
         self.player1.platform_group = self.platforms
         self.player2.platform_group = self.platforms
 
+        # players sprite group
+        self.players_sprite.add(self.player1)
+        self.players_sprite.add(self.player2)
         self.run()
 
     def run(self):
@@ -65,8 +68,6 @@ class Game:
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
 
-
-
     def events(self):
         for event in pg.event.get():
             # check for closing window
@@ -80,17 +81,34 @@ class Game:
     def update(self):
         self.all_sprites.update()
         # check for player-platform collision
-        hits = pg.sprite.spritecollide(self.player1, self.platforms, False)
-        if hits:
-            if self.player1.vel.y > 0:
-                self.player1.pos.y = hits[0].rect.top
-                self.player1.vel.y = 0
 
-        hits = pg.sprite.spritecollide(self.player2, self.platforms, False)
-        if hits:
-            if self.player2.vel.y > 0:
-                self.player2.pos.y = hits[0].rect.top
-                self.player2.vel.y = 0
+        sprite_hits = pg.sprite.groupcollide(
+            self.players_sprite, self.platforms, False, False
+        )
+
+        for player, platform in sprite_hits.items():
+            if player.vel.y > 0:
+                player.pos.y = platform[0].rect.top
+                player.vel.y = 0
+
+        player1_ammunition_sprite = self.player1.get_ammunition_sprite_group()
+        player2_ammunition_sprite = self.player2.get_ammunition_sprite_group()
+
+        # check if players collides with player1 ammunition
+        sprite_hits = pg.sprite.spritecollide(
+            self.player2, player1_ammunition_sprite, True
+        )
+
+        if sprite_hits:
+            print(f"player collided {self.player2.name}")
+
+        # check if players collides with player2 ammunition
+        sprite_hits = pg.sprite.spritecollide(
+            self.player1, player2_ammunition_sprite, True
+        )
+
+        if sprite_hits:
+            print(f"player collided {self.player1.name}")
 
         # checking if player dies
         if self.player1.shield == 0:
@@ -98,7 +116,6 @@ class Game:
 
         if self.player2.shield == 0:
             self.player2.lives -= 1
-
 
         # if player dies 3 times, game over
         if self.player1.lives == 0:

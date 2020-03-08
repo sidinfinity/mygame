@@ -1,10 +1,11 @@
 import pygame as pg
 from settings import *
 
+
 class Bullet(pg.sprite.Sprite):
     def __init__(self, direction):
         super(Bullet, self).__init__()
-        self.image = pg.Surface((15,7))
+        self.image = pg.Surface((15, 7))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
         self.direction = direction
@@ -55,6 +56,9 @@ class Weapon(pg.sprite.Sprite):
     def update(self):
         raise NotImplementedError
 
+    def get_ammunition_sprite_group(self):
+        raise NotImplementedError
+
 
 class Pistol(Weapon):
     def __init__(self, controls, screen):
@@ -76,13 +80,8 @@ class Pistol(Weapon):
     def update(self):
         # update bullet movements
         self.all_sprites.update()
-
         # shooting
         self.shoot()
-
-
-
-
 
     def draw(self):
 
@@ -90,3 +89,6 @@ class Pistol(Weapon):
         # call draw() method for all sprite objects
         for sprite in self.all_sprites:
             sprite.draw()
+
+    def get_ammunition_sprite_group(self):
+        return self.all_sprites
