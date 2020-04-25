@@ -150,7 +150,7 @@ class Game:
 
 
 def start_game():
-        # players
+    # players
     g = Game("Laurel", "Hardy")
     g.show_start_screen()
     g.new_game()
